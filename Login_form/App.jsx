@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import Input from "@mui/material/Input";
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
@@ -29,7 +29,6 @@ export default function Login() {
     remember: isChecked
   }); 
 
-  console.log(user.email + " " + user.password);
   const [showPassword, setShowPassword] = React.useState(false);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -46,13 +45,17 @@ export default function Login() {
   }
   const inputFieldStyles = {
     my :2,
-    width : '55ch',  
+    width : '50ch',  
     '& input' : {
-      height:'3ch'
+      height:'4ch',
+      backgroundColor: 'transparent',
+      fontSize:'2ch'
+
     },
     '& label' : {
       fontSize : '19px'
     }
+   
   };
   return(
     <main className="container" >
@@ -68,21 +71,22 @@ export default function Login() {
       </Box>
         <form onSubmit={(e) => e.preventDefault() }>
           <Stack>
+
             <TextField 
-              id="outlined-basic" 
+              id="standard-basic" 
               label="Email address*" 
-              variant="outlined"
+              variant="standard"
               sx={inputFieldStyles}
-              autoFocus
+              autoFocus = {user.email == "" ? true : false}
               onChange={handleChange}
               name="email"
               value={user.email}
             />
 
-            <FormControl sx={inputFieldStyles} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
+            <FormControl sx={inputFieldStyles} variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
                 type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
@@ -90,7 +94,6 @@ export default function Login() {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
-                      edge="end"
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -124,7 +127,7 @@ export default function Login() {
       sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          width : '55ch',
+          width : '50ch',
           mt: 2, 
           mx : 2 
         }}
