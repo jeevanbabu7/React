@@ -1,12 +1,18 @@
-import React from "react"
+import React, { useState } from "react"
 import { Stack, TextField } from "@mui/material";
 import SvgIcon from '@mui/material/SvgIcon';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Box from '@mui/material/Box';
-
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 function HomeIcon(props) {
   return (
     <SvgIcon {...props} fontSize="large">
@@ -16,8 +22,38 @@ function HomeIcon(props) {
 }
 
 export default function Login() {
+  const [isChecked , setChecked] = useState(true);
+  const [user , setUser] = useState({
+    email:"" ,
+    password: "" ,
+    remember: isChecked
+  }); 
 
+  console.log(user.email + " " + user.password);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleChange = (event) => {
+    const {name , value} = event.target;
+    setUser( prevState => {
+      return {
+        ...prevState , [name] : value
+      };
+    });
+  }
+  const inputFieldStyles = {
+    my :2,
+    width : '55ch',  
+    '& input' : {
+      height:'3ch'
+    },
+    '& label' : {
+      fontSize : '19px'
+    }
+  };
   return(
     <main className="container" >
       <Box 
@@ -30,51 +66,60 @@ export default function Login() {
         <HomeIcon color="primary" />
         <p className="sign-in">Sign In</p>
       </Box>
-      <Stack>
-      <TextField 
-        id="outlined-basic" 
-        label="Email address*" 
-        variant="outlined"
-        sx={{
-          my :2,
-          width : '55ch',  
-          '& input' : {
-            height:'3ch'
-          },
-          '& label' : {
-            fontSize : '19px'
-          }
-        }}
+        <form onSubmit={(e) => e.preventDefault() }>
+          <Stack>
+            <TextField 
+              id="outlined-basic" 
+              label="Email address*" 
+              variant="outlined"
+              sx={inputFieldStyles}
+              autoFocus
+              onChange={handleChange}
+              name="email"
+              value={user.email}
+            />
 
-        autoFocus
-      />
-      <TextField 
-        id="outlined-basic" 
-        label="Password*" 
-        variant="outlined"
-        sx={{
-          my:2,
-          width : '55ch',  
-          '& input' : {
-            height:'3ch'
-          },
-          '& label' : {
-            fontSize : '19px'
-          }
-        }}
-      />
-      <FormControlLabel 
-      control={<Checkbox defaultChecked />} label="Remember Me" 
-      defaultChecked
-      />
-      <Button 
-        variant="contained"
-        sx={{
-          mt:3,
-          height:'5.5ch'
-        }}
-      >Sign In</Button>
-      </Stack>
+            <FormControl sx={inputFieldStyles} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+                onChange={handleChange}
+                name="password"
+                value={user.password}
+              />
+            </FormControl>
+
+            <FormControlLabel 
+            control={<Checkbox defaultChecked onChange={(e) =>{
+              setChecked( prevState => !prevState);
+            } }/>} label="Remember Me" 
+            
+            />
+
+            <Button 
+              variant="contained"
+              sx={{
+                mt:3,
+                height:'5.5ch'
+              }}
+              type="submit"
+            >Sign In</Button>
+          </Stack>
+        </form>
       <Box
       sx={{
           display: 'flex',
